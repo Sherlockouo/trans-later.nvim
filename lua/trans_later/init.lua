@@ -8,7 +8,7 @@ local translator = require("trans_later.translator")
 function M.setup(user_config)
 	config.setup(user_config)
 	vim.api.nvim_create_user_command("Translate", translator.translate, { nargs = 0 })
-	vim.api.nvim_set_keymap("n", "<leader>tr", ":Translate<CR>", { noremap = true, silent = true })
+	vim.api.nvim_set_keymap("n", "T", ":Translate<CR>", { noremap = true, silent = true })
 end
 
 return M
