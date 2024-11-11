@@ -67,7 +67,6 @@ function M.translate()
 	end
 
 	local lang = "zh"
-	vim.notifiy("翻译目标语言: " .. lang(" 单词: ") .. word)
 	-- 使用 Google Translate API 获取翻译结果
 	local translation = translate_text(word, lang)
 
