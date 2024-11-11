@@ -1,7 +1,5 @@
 local M = {}
 
-local config = require("config")
-
 -- 创建一个全局变量来存储窗口 ID
 M.popup_win = nil
 
@@ -68,10 +66,7 @@ function M.translate()
 		return
 	end
 
-	local lang = config.options.default_target_lang
-	if not lang then
-		lang = "en"
-	end
+	local lang = "zh"
 	vim.notifiy("翻译目标语言: " .. lang(" 单词: ") .. word)
 	-- 使用 Google Translate API 获取翻译结果
 	local translation = translate_text(word, lang)

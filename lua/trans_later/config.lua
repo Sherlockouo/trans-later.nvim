@@ -3,7 +3,6 @@ local M = {}
 -- 默认配置
 M.options = {
 	default_lang = "en",
-	default_target_lang = "zh",
 }
 
 -- 用户配置合并
