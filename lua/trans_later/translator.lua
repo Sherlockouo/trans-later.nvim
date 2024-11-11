@@ -38,7 +38,7 @@ local function show_translation(translation)
 	end
 
 	-- 设置自动命令在失焦时关闭窗口
-	vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "InsertEnter", "BufLeave" }, {
+	vim.api.nvim_create_autocmd({ "CursorMoved" }, {
 		once = true,
 		callback = close_popup,
 	})
