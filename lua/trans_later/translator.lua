@@ -1,5 +1,7 @@
 local M = {}
 
+local config = require("config")
+
 -- 创建一个全局变量来存储窗口 ID
 M.popup_win = nil
 
@@ -19,7 +21,7 @@ local function show_translation(translation)
 	local win_opts = {
 		relative = "cursor",
 		width = math.min(50, #translation + 2),
-		height = 2,
+		height = 1,
 		row = 1,
 		col = 0,
 		style = "minimal",
@@ -38,7 +40,7 @@ local function show_translation(translation)
 	end
 
 	-- 设置自动命令在失焦时关闭窗口
-	vim.api.nvim_create_autocmd({ "CursorMoved" }, {
+	vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "InsertEnter", "BufLeave" }, {
 		once = true,
 		callback = close_popup,
 	})
@@ -66,18 +68,16 @@ function M.translate()
 		return
 	end
 
-	-- 输入目标语言
-	vim.ui.input({ prompt = "输入目标语言: ", default = "zh" }, function(lang)
-		if not lang or lang == "" then
-			lang = "zh"
-		end
+	local lang = config.options.default_target_lang
+	if not lang then
+		lang = "en"
+	end
+	vim.notifiy("翻译目标语言: " .. lang(" 单词: ") .. word)
+	-- 使用 Google Translate API 获取翻译结果
+	local translation = translate_text(word, lang)
 
-		-- 使用 Google Translate API 获取翻译结果
-		local translation = translate_text(word, lang)
-
-		-- 显示悬浮窗
-		show_translation(translation)
-	end)
+	-- 显示悬浮窗
+	show_translation(translation)
 end
 
 return M
