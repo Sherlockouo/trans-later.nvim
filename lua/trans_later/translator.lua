@@ -38,8 +38,23 @@ local function translate()
 		if not lang or lang == "" then
 			lang = config.options.default_lang
 		end
+
 		local translation = translate_text(text, lang)
-		vim.api.nvim_echo({ { translation, "Normal" } }, false, {})
+
+		-- 显示悬浮窗翻译结果
+		local win_opts = {
+			relative = "cursor",
+			width = math.min(40, #translation + 2),
+			height = 1,
+			row = 1,
+			col = 0,
+			style = "minimal",
+			border = "rounded",
+		}
+
+		local buf = vim.api.nvim_create_buf(false, true)
+		vim.api.nvim_buf_set_lines(buf, 0, -1, false, { translation })
+		vim.api.nvim_open_win(buf, true, win_opts)
 	end)
 end
 
