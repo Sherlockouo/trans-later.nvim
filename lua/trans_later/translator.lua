@@ -44,7 +44,20 @@ local function show_translation(translation)
 	})
 end
 
--- 翻译函数，按下 Normal 模式下的 'T' 键时调用
+-- 使用 Google Translate API 进行翻译
+local function translate_text(text, target_lang)
+	local api_url = string.format(
+		"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&q=%s",
+		target_lang,
+		vim.fn.escape(text, " ")
+	)
+	local command = string.format("curl -s '%s'", api_url)
+	local result = vim.fn.system(command)
+	local translated_text = result:match('%["([^"]+)"')
+	return translated_text or "翻译失败"
+end
+
+-- 翻译函数
 function M.translate()
 	-- 获取光标下的单词
 	local word = vim.fn.expand("<cword>")
@@ -53,15 +66,18 @@ function M.translate()
 		return
 	end
 
-	-- 使用 Google Translate API 获取翻译结果（这里只是模拟，实际项目中可以调用 API）
-	local lang = "zh"
-	local translation = "这是一个翻译示例：" .. word
+	-- 输入目标语言
+	vim.ui.input({ prompt = "输入目标语言: ", default = "zh" }, function(lang)
+		if not lang or lang == "" then
+			lang = "zh"
+		end
 
-	-- 显示悬浮窗
-	show_translation(translation)
+		-- 使用 Google Translate API 获取翻译结果
+		local translation = translate_text(word, lang)
+
+		-- 显示悬浮窗
+		show_translation(translation)
+	end)
 end
-
--- 在 Normal 模式下映射 'T' 键触发翻译
-vim.api.nvim_set_keymap("n", "T", ":lua require('trans_later').translate()<CR>", { noremap = true, silent = true })
 
 return M
