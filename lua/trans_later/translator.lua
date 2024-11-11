@@ -19,11 +19,11 @@ local function show_translation(translation)
 	local win_opts = {
 		relative = "cursor",
 		width = math.min(50, #translation + 2),
-		height = 1,
+		height = 2,
 		row = 1,
 		col = 0,
 		style = "minimal",
-		border = "single",
+		border = "none",
 	}
 
 	-- 创建浮动窗口
